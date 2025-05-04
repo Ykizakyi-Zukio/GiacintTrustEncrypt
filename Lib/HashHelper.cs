@@ -1,34 +1,22 @@
 ﻿using SHA3.Net;
 using System;
 using System.Security.Cryptography;
+using System;
 using System.Text;
 
-namespace GiacintTrustEncrypt.Lib
+namespace GiacintTrustEncrypt.Lib;
+internal class HashHelper
 {
-    internal static class Shake256Helper
+    internal static string Hash(string input) => Convert.ToBase64String(HashBytes(input));
+
+    internal static byte[] HashBytes(string input)
     {
-        /// <summary>
-        /// Хеширует пароль с использованием SHAKE256 без соли.
-        /// </summary>
-        public static string Hash(string password, int hashLength = 32)
+        using (SHA256 sha256 = SHA256.Create())
         {
-            // Преобразуем пароль в байты
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-
-            // Используем SHAKE256 для хеширования
-            var shake256 = new SHA3.Net.SHAKE256();
-            byte[] hash = shake256.Hash(passwordBytes, hashLength);
-
-            return Convert.ToBase64String(hash); // возвращаем хеш в формате Base64
-        }
-
-        /// <summary>
-        /// Проверка пароля с хешом.
-        /// </summary>
-        public static bool Verify(string password, string storedHash, int hashLength = 32)
-        {
-            string computedHash = Hash(password, hashLength);
-            return computedHash == storedHash;
+            byte[] fullHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
+            byte[] hash24 = new byte[24];
+            Array.Copy(fullHash, hash24, 24); // Обрезаем до 24 байт
+            return hash24;
         }
     }
 }

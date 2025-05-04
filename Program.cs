@@ -1,9 +1,7 @@
 ﻿using System.Text;
 using GiacintTrustEncrypt.Lib;
-using SecurityDriven.Inferno.Extensions;
 
-
-namespace Giacint.TrustEncrypt;
+namespace GiacintTrustEncrypt;
 
 class Program
 {
@@ -60,7 +58,7 @@ class Program
                 case "@pass":
                     if (args[1].Length > 11)
                     {
-                        key = new(HashHelper.HashBase64(args[1]));
+                        key = new(HashHelper.Hash(args[1]));
                         aes = new(key.Get());
                     }
                     else
@@ -74,7 +72,7 @@ class Program
                     break;
                 case "@pass@check":
                     if (key != null && args.Length > 1)
-                        if (key.Get() == HashHelper.HashBase64(args[1])) { Console.WriteLine($"{Color.green} Correct pass!"); }
+                        if (key.Get() == HashHelper.Hash(args[1])) { Console.WriteLine($"{Color.green} Correct pass!"); }
                     else
                         Console.WriteLine($"{Color.red} Uncorrect pass");
 
@@ -82,13 +80,20 @@ class Program
                     break;
                 case "@hash@v":
                     if (args[1].Length > 0)
-                        Console.WriteLine(HashHelper.HashBase64(args[1]));
+                        Console.WriteLine(HashHelper.Hash(args[1]));
                     break;
-                case "@aes@v":
+                case "@aes@ve":
                     if (key == null) Console.WriteLine("Invalid pass!");
                     if (args[1].Length == 0) Console.WriteLine("Invalid plane text!");
 
-                    Console.WriteLine(Convert.ToBase64String(aes.Encrypt(args[1].ToBytes())));
+                    Console.WriteLine(aes.Encrypt(args[1]));
+                    break;
+
+                case "@aes@vd":
+                    if (key == null) Console.WriteLine("Invalid pass!");
+                    if (args[1].Length == 0) Console.WriteLine("Invalid plane text!");
+
+                    Console.WriteLine(aes.Decrypt(args[1]));
                     break;
                 case "@help":
                     HelpMessage();
@@ -108,7 +113,7 @@ class Program
                     if (args[1].EndsWith(".gte")) { Console.WriteLine("File already encrypted!"); break; }
 
                     // Читаем оригинальный файл и шифруем
-                    byte[] fileData = StorageHelper.ReadFile(args[1]).ToBytes();
+                    byte[] fileData = Encoding.UTF8.GetBytes(StorageHelper.ReadFile(args[1]));
                     byte[] encryptedData = aes.Encrypt(fileData);
 
                     // Сохраняем зашифрованный файл
@@ -126,7 +131,7 @@ class Program
                     if (!args[1].EndsWith(".gte")) { Console.WriteLine("File not encrypted!"); break; }
 
                     // Читаем зашифрованный файл и расшифровываем
-                    byte[] encryptedFile = StorageHelper.ReadFile(args[1]).ToBytes();
+                    byte[] encryptedFile = Encoding.UTF8.GetBytes(StorageHelper.ReadFile(args[1]));
                     byte[] decryptedData = aes.Decrypt(encryptedFile);
 
                     // Сохраняем расшифрованный файл (убираем .gte)

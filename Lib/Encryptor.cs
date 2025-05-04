@@ -11,7 +11,7 @@ namespace GiacintTrustEncrypt.Lib
 
         public Encryptor(string keyString)
         {
-            key = Encoding.ASCII.GetBytes(keyString);
+            key = Encoding.UTF8.GetBytes(keyString);
 
             if (key.Length != 32)
             {
@@ -19,6 +19,9 @@ namespace GiacintTrustEncrypt.Lib
                 //throw new ArgumentException("Ключ должен быть длиной 32 байта (256 бит).");
             }
         }
+
+        public string Encrypt(string plainData) => Convert.ToBase64String(Encrypt(Convert.FromBase64String(plainData)));
+
 
         public byte[] Encrypt(byte[] plainData)
         {
@@ -39,6 +42,7 @@ namespace GiacintTrustEncrypt.Lib
             return fullData;
         }
 
+        public string Decrypt(string encryptedData) => Convert.ToBase64String(Convert.FromBase64String(encryptedData));
 
         public byte[] Decrypt(byte[] encryptedData)
         {
