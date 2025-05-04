@@ -20,49 +20,50 @@ namespace GiacintTrustEncrypt.Lib
             }
         }
 
-        public string Encrypt(string plainText)
+        public byte[] Encrypt(byte[] plainData)
         {
             using var aes = Aes.Create();
-            aes.Key = key;
+            aes.Key = key; // Ключ 32 байта
             aes.Mode = CipherMode.CBC;
             aes.Padding = PaddingMode.PKCS7;
-
-            aes.GenerateIV();
-            var iv = aes.IV;
+            aes.GenerateIV(); // Генерируем случайный IV
 
             using var encryptor = aes.CreateEncryptor();
-            byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
-            byte[] encrypted = encryptor.TransformFinalBlock(plainBytes, 0, plainBytes.Length);
+            byte[] encrypted = encryptor.TransformFinalBlock(plainData, 0, plainData.Length);
 
-            // Объединяем IV + encrypted
-            byte[] result = new byte[iv.Length + encrypted.Length];
-            Buffer.BlockCopy(iv, 0, result, 0, iv.Length);
-            Buffer.BlockCopy(encrypted, 0, result, iv.Length, encrypted.Length);
+            // Объединяем IV + зашифрованные данные
+            byte[] fullData = new byte[aes.IV.Length + encrypted.Length];
+            Buffer.BlockCopy(aes.IV, 0, fullData, 0, aes.IV.Length);
+            Buffer.BlockCopy(encrypted, 0, fullData, aes.IV.Length, encrypted.Length);
 
-            return Convert.ToBase64String(result);
+            return fullData;
         }
 
-        public string Decrypt(string base64CipherText)
+
+        public byte[] Decrypt(byte[] encryptedData)
         {
-            byte[] fullCipher = Convert.FromBase64String(base64CipherText);
+            if (encryptedData.Length < 16) throw new ArgumentException("Файл повреждён!");
 
             using var aes = Aes.Create();
             aes.Key = key;
             aes.Mode = CipherMode.CBC;
             aes.Padding = PaddingMode.PKCS7;
 
-            byte[] iv = new byte[16]; // AES block size = 16 байт
-            byte[] cipher = new byte[fullCipher.Length - iv.Length];
-
-            Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);
-            Buffer.BlockCopy(fullCipher, iv.Length, cipher, 0, cipher.Length);
-
+            // Извлекаем IV (первые 16 байт)
+            byte[] iv = new byte[16];
+            Buffer.BlockCopy(encryptedData, 0, iv, 0, iv.Length);
             aes.IV = iv;
+
+            // Извлекаем само зашифрованное содержимое
+            int cipherLen = encryptedData.Length - iv.Length;
+            byte[] cipher = new byte[cipherLen];
+            Buffer.BlockCopy(encryptedData, iv.Length, cipher, 0, cipherLen);
 
             using var decryptor = aes.CreateDecryptor();
             byte[] decrypted = decryptor.TransformFinalBlock(cipher, 0, cipher.Length);
 
-            return Encoding.UTF8.GetString(decrypted);
+            return decrypted;
         }
+
     }
 }

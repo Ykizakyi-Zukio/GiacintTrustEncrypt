@@ -17,7 +17,7 @@
 
         internal static void CreateFile(string path, string content)
         {
-            FileStream s = new(path, FileMode.OpenOrCreate, FileAccess.Write);
+            FileStream s = new(path, FileMode.Create, FileAccess.Write);
             StreamWriter sw = new(s);
 
             sw.Write(content);

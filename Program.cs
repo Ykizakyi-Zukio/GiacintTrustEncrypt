@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using GiacintTrustEncrypt.Lib;
+using SecurityDriven.Inferno.Extensions;
 
 
 namespace Giacint.TrustEncrypt;
@@ -89,7 +90,7 @@ class Program
                     if (key == null) Console.WriteLine("Invalid pass!");
                     if (args[1].Length == 0) Console.WriteLine("Invalid plane text!");
 
-                    Console.WriteLine(aes.Encrypt(args[1]));
+                    Console.WriteLine(Convert.ToBase64String(aes.Encrypt(args[1].ToBytes())));
                     break;
                 case "@help":
                     HelpMessage();
@@ -97,37 +98,41 @@ class Program
 
                 //FILES & DIRECTORIES
                 case "@e@file":
-                    if (args.Length > 1)
-                        args[1] = args[1].Trim('\"');
-                    else break;
+                    if (args.Length <= 1) break;
+                    args[1] = args[1].Trim('\"');
 
                     if (aes == null) { Console.WriteLine("Invalid pass"); break; }
-                    if (!File.Exists(args[1])) break;
-                    if (args[1].EndsWith(".gte")) { Console.WriteLine("File arleady encrypted"); break; }
+                    if (!File.Exists(args[1])) { Console.WriteLine("File not found"); break; }
+                    if (args[1].EndsWith(".gte")) { Console.WriteLine("File already encrypted!"); break; }
 
-                    var data = aes.Encrypt(StorageHelper.ReadFile(args[1]));
-                    
-                    StorageHelper.CreateFile(args[1] + ".gte", data);
-                    StorageHelper.ReadFile(args[1]);
+                    // Читаем оригинальный файл и шифруем
+                    byte[] fileData = StorageHelper.ReadFile(args[1]).ToBytes();
+                    byte[] encryptedData = aes.Encrypt(fileData);
 
-                    Console.WriteLine("File success encrypted");
+                    // Сохраняем зашифрованный файл
+                    StorageHelper.CreateFile(args[1] + ".gte", Convert.ToBase64String(encryptedData));
+
+                    Console.WriteLine("File successfully encrypted!");
                     break;
+
                 case "@d@file":
-                    if (args.Length > 1)
-                        args[1] = args[1].Trim('\"');
-                    else break;
+                    if (args.Length <= 1) break;
+                    args[1] = args[1].Trim('\"');
 
                     if (aes == null) { Console.WriteLine("Invalid pass"); break; }
-                    if (!File.Exists(args[1])) break;
-                    if (args[1].EndsWith(".gte") != true) { Console.WriteLine("File not encrypted!"); break; }
+                    if (!File.Exists(args[1])) { Console.WriteLine("File not found"); break; }
+                    if (!args[1].EndsWith(".gte")) { Console.WriteLine("File not encrypted!"); break; }
 
-                    var _data = aes.Decrypt(StorageHelper.ReadFile(args[1]));
+                    // Читаем зашифрованный файл и расшифровываем
+                    byte[] encryptedFile = StorageHelper.ReadFile(args[1]).ToBytes();
+                    byte[] decryptedData = aes.Decrypt(encryptedFile);
 
-                    StorageHelper.CreateFile(args[1].TrimEnd(".gte".ToCharArray()), _data);
-                    StorageHelper.ReadFile(args[1]);
+                    // Сохраняем расшифрованный файл (убираем .gte)
+                    StorageHelper.CreateFile(args[1].Substring(0, args[1].Length - 4), Convert.ToBase64String(decryptedData));
 
-                    Console.WriteLine("File success decrypted!");
+                    Console.WriteLine("File successfully decrypted!");
                     break;
+
             }
         }
     }
