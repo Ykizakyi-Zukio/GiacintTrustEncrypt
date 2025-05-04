@@ -95,6 +95,10 @@ class Program
                 case "@help":
                     HelpMessage();
                     break;
+                case "@c":
+                    Console.Clear();
+                    WelcomeMessage();
+                    break;
 
                 //FILES & DIRECTORIES
                 case "@e@file":
@@ -142,5 +146,7 @@ class Program
         Console.WriteLine(ultraLightPink);
 
         for (int i = 0; i < cmds.Count; i++) { Console.WriteLine(cmds[i]); }
+
+        Console.WriteLine("\r\n" + reset);
     }
 }
