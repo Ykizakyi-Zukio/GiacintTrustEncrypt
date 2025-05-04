@@ -1,0 +1,24 @@
+﻿
+using System.Diagnostics;
+
+namespace GiacintTrustEncrypt.Lib
+{
+    internal class WebHelper
+    {
+        internal static void OpenURL(string url)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true // Обязательно для открытия в браузере
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Не удалось открыть ссылку: " + ex.Message);
+            }
+        }
+    }
+}
