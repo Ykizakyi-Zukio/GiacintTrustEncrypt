@@ -1,40 +1,34 @@
-﻿using Isopoh.Cryptography.Argon2;
-using Isopoh.Cryptography.SecureArray;
+﻿using SHA3.Net;
 using System;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace GiacintTrustEncrypt.Lib
 {
-    internal static class HashHelper
+    internal static class Shake256Helper
     {
+        /// <summary>
+        /// Хеширует пароль с использованием SHAKE256 без соли.
+        /// </summary>
         public static string Hash(string password, int hashLength = 32)
         {
-            if (hashLength < 4 || hashLength > 512)
-                throw new ArgumentOutOfRangeException(nameof(hashLength));
+            // Преобразуем пароль в байты
+            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
 
-            byte[] salt = new byte[16];
-            RandomNumberGenerator.Fill(salt);
+            // Используем SHAKE256 для хеширования
+            var shake256 = new SHA3.Net.SHAKE256();
+            byte[] hash = shake256.Hash(passwordBytes, hashLength);
 
-            var config = new Argon2Config
-            {
-                Password = Encoding.UTF8.GetBytes(password),
-                Salt = salt,
-                HashLength = hashLength,
-                TimeCost = 4,
-                MemoryCost = 65536,
-                Lanes = 2,
-                Threads = 2,
-                Type = Argon2Type.DataIndependentAddressing,
-                Version = Argon2Version.Nineteen
-            };
-
-            using var argon2 = new Argon2(config);
-            using var hash = argon2.Hash();
-
-            return Convert.ToBase64String(hash.Buffer); // возвращаем только хеш (base64)
+            return Convert.ToBase64String(hash); // возвращаем хеш в формате Base64
         }
 
-        // Верификация невозможна без параметров и соли — добавь отдельно, если потребуется.
+        /// <summary>
+        /// Проверка пароля с хешом.
+        /// </summary>
+        public static bool Verify(string password, string storedHash, int hashLength = 32)
+        {
+            string computedHash = Hash(password, hashLength);
+            return computedHash == storedHash;
+        }
     }
 }

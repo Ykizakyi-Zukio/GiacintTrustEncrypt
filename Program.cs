@@ -10,12 +10,8 @@ class Program
     Key key;
     Encryptor aes;
 
-    string pink = "\u001b[38;5;218m";  // Розово-лиловый из 256-цветной палитры
-    string ultraLightPink = "\u001b[38;5;225m";
-    string reset = "\u001b[0m";        // Сброс форматирования
-
     List<string> cmds = new List<string> { 
-        "@m@git", "@pass", "@pass@v", "@pass@e", "@hash@v", "@aes@v", "@help"
+        "@m@git", "@pass", "@pass@v", "@pass@e", "@hash@v", "@aes@v", "@help", "@c", "@e@file", "@d@file"
     };
 
     static void Main()
@@ -29,7 +25,7 @@ class Program
     private void WelcomeMessage()
     {
 
-        Console.Write($"{pink}/)  /)~ ┏━━━━━━━━━━━━━━━━━┓\r\n" +
+        Console.Write($"{Color.pink}/)  /)~ ┏━━━━━━━━━━━━━━━━━┓\r\n" +
             "( •-• )  ~ ♡ Welcome to Giacint Trust Encrypt\r\n" +
             "♡/づづ   Author: @YZukio\r\n" +
             "         Github: https://github.com/Ykizakyi-Zukio \r\n" +
@@ -37,7 +33,7 @@ class Program
 
         Console.Write("To start using write your pass for contuite encrypt/decrypt: \r\n" +
             "@pass <pass>\r\n" +
-            "@help (Get all commands" +
+            "@help (Get all commands\r\n" +
             "@m@git (Go to author github)\r\n\r\n");
 
         Console.ForegroundColor = ConsoleColor.White;
@@ -64,7 +60,7 @@ class Program
                 case "@pass":
                     if (args[1].Length > 11)
                     {
-                        key = new(HashHelper.Hash(args[1], 24));
+                        key = new(HashHelper.HashBase64(args[1]));
                         aes = new(key.Get());
                     }
                     else
@@ -76,15 +72,17 @@ class Program
                     else
                         Console.WriteLine("Pass not initializated!");
                     break;
-                case "@pass@e":
-                    if (key != null)
-                        Console.WriteLine(key.ToString());
+                case "@pass@check":
+                    if (key != null && args.Length > 1)
+                        if (key.Get() == HashHelper.HashBase64(args[1])) { Console.WriteLine($"{Color.green} Correct pass!"); }
                     else
-                        Console.WriteLine("Pass not initializated!");
+                        Console.WriteLine($"{Color.red} Uncorrect pass");
+
+                    Console.ForegroundColor = ConsoleColor.White;
                     break;
                 case "@hash@v":
                     if (args[1].Length > 0)
-                        Console.WriteLine(HashHelper.Hash(args[1], 16));
+                        Console.WriteLine(HashHelper.HashBase64(args[1]));
                     break;
                 case "@aes@v":
                     if (key == null) Console.WriteLine("Invalid pass!");
@@ -143,10 +141,10 @@ class Program
 
     private void HelpMessage()
     {
-        Console.WriteLine(ultraLightPink);
+        Console.WriteLine(Color.ultraLightPink);
 
         for (int i = 0; i < cmds.Count; i++) { Console.WriteLine(cmds[i]); }
 
-        Console.WriteLine("\r\n" + reset);
+        Console.WriteLine("\r\n" + Color.reset);
     }
 }
