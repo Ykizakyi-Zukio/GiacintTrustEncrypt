@@ -69,6 +69,7 @@ class Program
                         WebHelper.OpenURL("https://github.com/Ykizakyi-Zukio");
                         break;
                     case "@pass":
+                        if (args.Length < 2) { Console.WriteLine("Invalid pass"); break; }
                         if (args[1].Length > 11)
                         {
                             key = new(HashHelper.Hash(args[1]));
@@ -96,15 +97,15 @@ class Program
                             Console.WriteLine(HashHelper.Hash(args[1]));
                         break;
                     case "@aes@ve":
-                        if (key == null) Console.WriteLine("Invalid pass!");
-                        if (args[1].Length == 0) Console.WriteLine("Invalid plane text!");
+                        if (key == null || aes == null) { Console.WriteLine("Invalid pass!"); break; };
+                        if (args[1].Length == 0) { Console.WriteLine("Invalid plane text!"); break; }
 
                         Console.WriteLine(aes.Encrypt(args[1]));
                         break;
 
                     case "@aes@vd":
-                        if (key == null) Console.WriteLine("Invalid pass!");
-                        if (args[1].Length == 0) Console.WriteLine("Invalid plane text!");
+                        if (key == null || aes == null) { Console.WriteLine("Invalid pass!"); break; }
+                        if (args[1].Length == 0) { Console.WriteLine("Invalid plane text!"); break; };
 
                         Console.WriteLine(aes.Decrypt(args[1]));
                         break;
@@ -180,6 +181,7 @@ class Program
 
         for (int i = 0; i < cmds.Count; i++) { Console.WriteLine(cmds[i]); }
 
-        Console.WriteLine("\r\n" + Color.reset);
+        Console.WriteLine("\r\n");
+        Console.ForegroundColor= ConsoleColor.White;
     }
 }
