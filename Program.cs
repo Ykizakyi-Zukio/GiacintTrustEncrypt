@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text;
 using GiacintTrustEncrypt.Lib;
 
 namespace GiacintTrustEncrypt;
@@ -9,7 +10,18 @@ class Program
     Encryptor aes;
 
     List<string> cmds = new List<string> { 
-        "@m@git", "@pass", "@pass@v", "@pass@e", "@hash@v", "@aes@v", "@help", "@c", "@e@file", "@d@file"
+        "@m@git - open author github", 
+        "@pass <pass> - password for encryption", 
+        "@pass@v - view hash key by pass", 
+        "@pass@check <pass> - check validate of pass", 
+        "@hash@v <data> - data to hash", 
+        "@aes@ve <data> - fast encrypt data",
+        "@aes@vd <data> - fast decrypt data",
+        "@help - view all commands",
+        "@c - clear cmd",
+        "@e@file <filePath> - encrypt file and create .gte file",
+        "@d@file <filePath> - decrypt file and create file withount .gte", 
+        "@dir <*.extension>pathDirectory> or @dir <pathDirectory> - show all files from directory"
     };
 
     static void Main()
@@ -139,7 +151,22 @@ class Program
 
                     Console.WriteLine("File successfully decrypted!");
                     break;
+                case "@dir":
+                    if (args.Length < 2) { Console.WriteLine("Invalid directory arg."); break; }
+                    args[1] = args[1].Trim('\"');
+                    string search = "*";
+                    if (args[1].StartsWith('*'))
+                    {
+                        search = args[1].Remove(args[1].IndexOf('@')).TrimEnd('@');
+                        args[1] = args[1].Substring(args[1].IndexOf('@')).TrimStart('@');
+                    }
 
+                    //if (Directory.Exists(args[1])) { Console.WriteLine("Invalid directory."); break; }
+
+                    Console.WriteLine($"{Color.ultraLightPink} Directory {args[1]}:)");
+                    StorageHelper.ProcessDirectory(args[1], search);
+                    Console.ForegroundColor = ConsoleColor.White;
+                    break;
             }
         }
     }

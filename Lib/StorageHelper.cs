@@ -25,5 +25,38 @@
             sw.Close();
             s.Close();
         }
+
+        internal static void ProcessDirectory(string targetDirectory, string search = "*")
+        {
+            try
+            {
+                string[] files = Directory.GetFiles(targetDirectory, search);
+
+                foreach (string file in files) { Console.WriteLine("Processed file '{0}.'", file); }
+            }
+            catch (Exception e) { Console.WriteLine(Color.red + e.ToString() + Color.ultraLightPink); }
+        }
+
+        internal static void ProcessDirectoryAll(string targetDirectory)
+        {
+            try
+            {
+                // Process the list of files found in the directory.
+                string[] fileEntries = Directory.GetFiles(targetDirectory);
+                foreach (string fileName in fileEntries)
+                    ProcessFile(fileName);
+
+                // Recurse into subdirectories of this directory.
+                string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
+                foreach (string subdirectory in subdirectoryEntries)
+                    ProcessDirectoryAll(subdirectory);
+            }
+            catch (Exception e) { Console.WriteLine(Color.red + e.ToString() + Color.ultraLightPink); }
+        }
+
+        internal static void ProcessFile(string path)
+        {
+            Console.WriteLine("Processed file '{0}'.", path);
+        }
     }
 }
