@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -7,46 +6,42 @@ namespace GiacintTrustEncrypt.Lib
 {
     internal class Encryptor
     {
-        private readonly byte[] key; // 32 байта
+        private readonly byte[] key; // 32 байта = 256 бит
 
         public Encryptor(string keyString)
         {
-            key = Encoding.UTF8.GetBytes(keyString);
+            if (keyString.Length != 32)
+                throw new ArgumentException("Ключ должен быть длиной 32 символа.");
 
-            if (key.Length != 32)
-            {
-                Console.WriteLine(key.Length);
-                //throw new ArgumentException("Ключ должен быть длиной 32 байта (256 бит).");
-            }
+            key = Encoding.UTF8.GetBytes(keyString);
         }
 
-        public string Encrypt(string plainData) => Convert.ToBase64String(Encrypt(Convert.FromBase64String(plainData)));
-
-
-        public byte[] Encrypt(byte[] plainData)
+        public string Encrypt(string plainText)
         {
             using var aes = Aes.Create();
-            aes.Key = key; // Ключ 32 байта
+            aes.Key = key;
             aes.Mode = CipherMode.CBC;
             aes.Padding = PaddingMode.PKCS7;
-            aes.GenerateIV(); // Генерируем случайный IV
+            aes.GenerateIV(); // Случайный IV
 
             using var encryptor = aes.CreateEncryptor();
-            byte[] encrypted = encryptor.TransformFinalBlock(plainData, 0, plainData.Length);
+            byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
+            byte[] cipherBytes = encryptor.TransformFinalBlock(plainBytes, 0, plainBytes.Length);
 
-            // Объединяем IV + зашифрованные данные
-            byte[] fullData = new byte[aes.IV.Length + encrypted.Length];
-            Buffer.BlockCopy(aes.IV, 0, fullData, 0, aes.IV.Length);
-            Buffer.BlockCopy(encrypted, 0, fullData, aes.IV.Length, encrypted.Length);
+            // Конкатенация: IV (16 байт) + зашифрованные данные
+            byte[] result = new byte[aes.IV.Length + cipherBytes.Length];
+            Buffer.BlockCopy(aes.IV, 0, result, 0, aes.IV.Length);
+            Buffer.BlockCopy(cipherBytes, 0, result, aes.IV.Length, cipherBytes.Length);
 
-            return fullData;
+            return Convert.ToBase64String(result);
         }
 
-        public string Decrypt(string encryptedData) => Convert.ToBase64String(Convert.FromBase64String(encryptedData));
-
-        public byte[] Decrypt(byte[] encryptedData)
+        public string Decrypt(string encryptedText)
         {
-            if (encryptedData.Length < 16) throw new ArgumentException("Файл повреждён!");
+            byte[] fullData = Convert.FromBase64String(encryptedText);
+
+            if (fullData.Length < 16)
+                throw new ArgumentException("Данные повреждены или не соответствуют ожидаемому формату.");
 
             using var aes = Aes.Create();
             aes.Key = key;
@@ -55,19 +50,18 @@ namespace GiacintTrustEncrypt.Lib
 
             // Извлекаем IV (первые 16 байт)
             byte[] iv = new byte[16];
-            Buffer.BlockCopy(encryptedData, 0, iv, 0, iv.Length);
+            Buffer.BlockCopy(fullData, 0, iv, 0, iv.Length);
             aes.IV = iv;
 
-            // Извлекаем само зашифрованное содержимое
-            int cipherLen = encryptedData.Length - iv.Length;
-            byte[] cipher = new byte[cipherLen];
-            Buffer.BlockCopy(encryptedData, iv.Length, cipher, 0, cipherLen);
+            // Остальное — зашифрованный текст
+            int cipherLength = fullData.Length - iv.Length;
+            byte[] cipherBytes = new byte[cipherLength];
+            Buffer.BlockCopy(fullData, iv.Length, cipherBytes, 0, cipherLength);
 
             using var decryptor = aes.CreateDecryptor();
-            byte[] decrypted = decryptor.TransformFinalBlock(cipher, 0, cipher.Length);
+            byte[] decryptedBytes = decryptor.TransformFinalBlock(cipherBytes, 0, cipherBytes.Length);
 
-            return decrypted;
+            return Encoding.UTF8.GetString(decryptedBytes);
         }
-
     }
 }

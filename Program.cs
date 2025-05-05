@@ -72,9 +72,9 @@ class Program
                     break;
                 case "@pass@check":
                     if (key != null && args.Length > 1)
-                        if (key.Get() == HashHelper.Hash(args[1])) { Console.WriteLine($"{Color.green} Correct pass!"); }
+                        if (key.Get() == HashHelper.Hash(args[1])) { Console.WriteLine($"{Color.green}✓ Correct pass!"); }
                     else
-                        Console.WriteLine($"{Color.red} Uncorrect pass");
+                        Console.WriteLine($"{Color.red}× Uncorrect pass");
 
                     Console.ForegroundColor = ConsoleColor.White;
                     break;
@@ -113,11 +113,11 @@ class Program
                     if (args[1].EndsWith(".gte")) { Console.WriteLine("File already encrypted!"); break; }
 
                     // Читаем оригинальный файл и шифруем
-                    byte[] fileData = Encoding.UTF8.GetBytes(StorageHelper.ReadFile(args[1]));
-                    byte[] encryptedData = aes.Encrypt(fileData);
+                    string fileData = StorageHelper.ReadFile(args[1]);
+                    string encryptedData = aes.Encrypt(fileData);
 
                     // Сохраняем зашифрованный файл
-                    StorageHelper.CreateFile(args[1] + ".gte", Convert.ToBase64String(encryptedData));
+                    StorageHelper.CreateFile(args[1] + ".gte", encryptedData);
 
                     Console.WriteLine("File successfully encrypted!");
                     break;
@@ -131,11 +131,11 @@ class Program
                     if (!args[1].EndsWith(".gte")) { Console.WriteLine("File not encrypted!"); break; }
 
                     // Читаем зашифрованный файл и расшифровываем
-                    byte[] encryptedFile = Encoding.UTF8.GetBytes(StorageHelper.ReadFile(args[1]));
-                    byte[] decryptedData = aes.Decrypt(encryptedFile);
+                    string encryptedFile = StorageHelper.ReadFile(args[1]);
+                    string decryptedData = aes.Decrypt(encryptedFile);
 
                     // Сохраняем расшифрованный файл (убираем .gte)
-                    StorageHelper.CreateFile(args[1].Substring(0, args[1].Length - 4), Convert.ToBase64String(decryptedData));
+                    StorageHelper.CreateFile(args[1].Substring(0, args[1].Length - 4), decryptedData);
 
                     Console.WriteLine("File successfully decrypted!");
                     break;
