@@ -1,7 +1,4 @@
-﻿using SHA3.Net;
-using System;
-using System.Security.Cryptography;
-using System;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace GiacintTrustEncrypt.Lib;
