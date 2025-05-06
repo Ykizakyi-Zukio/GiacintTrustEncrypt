@@ -8,6 +8,7 @@ class Program
 {
     Key key;
     Encryptor aes;
+    BinaryEncryptor binAes;
 
     List<string> cmds = new List<string> { 
         "@m@git - open author github", 
@@ -74,6 +75,7 @@ class Program
                         {
                             key = new(HashHelper.Hash(args[1]));
                             aes = new(key.Get());
+                            binAes = new(key.Get());
                         }
                         else
                             Console.WriteLine("No valid pass, minimal length is 12");
@@ -150,6 +152,36 @@ class Program
 
                         // Сохраняем расшифрованный файл (убираем .gte)
                         StorageHelper.CreateFile(args[1].Substring(0, args[1].Length - 4), decryptedData);
+
+                        Console.WriteLine("File successfully decrypted!");
+                        break;
+                    case "@e@fbin":
+                        if (args.Length <= 1) break;
+                        args[1] = args[1].Trim('\"');
+
+                        if (aes == null) { Console.WriteLine("Invalid pass"); break; }
+                        if (!File.Exists(args[1])) { Console.WriteLine("File not found"); break; }
+                        if (args[1].EndsWith(".gte")) { Console.WriteLine("File already encrypted!"); break; }
+
+                        byte[] fileBytes = File.ReadAllBytes(args[1]);
+                        byte[] encryptedBytes = binAes.Encrypt(fileBytes);
+
+                        File.WriteAllBytes(args[1] + ".gte", encryptedBytes);
+
+                        Console.WriteLine("File sucessfully encrypted!");
+                        break;
+                    case "@d@fbin":
+                        if (args.Length <= 1) break;
+                        args[1] = args[1].Trim('\"');
+
+                        if (aes == null) { Console.WriteLine("Invalid pass"); break; }
+                        if (!File.Exists(args[1])) { Console.WriteLine("File not found"); break; }
+                        if (!args[1].EndsWith(".gte")) { Console.WriteLine("File not encrypted!"); break; }
+
+                        byte[] _encryptedBytes = File.ReadAllBytes(args[1]);
+                        byte[] _decryptedBytes = binAes.Decrypt(_encryptedBytes);
+
+                        File.WriteAllBytes(args[1].Substring(0, args[1].Length - 4), _decryptedBytes);
 
                         Console.WriteLine("File successfully decrypted!");
                         break;
