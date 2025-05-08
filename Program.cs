@@ -22,7 +22,9 @@ class Program
         "@c - clear cmd",
         "@e@file <filePath> - encrypt file and create .gte file",
         "@d@file <filePath> - decrypt file and create file withount .gte", 
-        "@dir <*.extension>pathDirectory> or @dir <pathDirectory> - show all files from directory"
+        "@dir <*.extension>pathDirectory> or @dir <pathDirectory> - show all files from directory",
+        "@e@fbin <filePath> - encrypt binary file (video, audio)",
+        "@d@fbin <filePath> - decrypt binary file (video, audio)"
     };
 
     static void Main()
