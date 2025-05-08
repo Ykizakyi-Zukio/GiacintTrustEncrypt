@@ -17,7 +17,7 @@ namespace GiacintTrustEncrypt.Lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Не удалось открыть ссылку: " + ex.Message);
+                Console.WriteLine("Couldn't to open url: " + ex.Message);
             }
         }
     }

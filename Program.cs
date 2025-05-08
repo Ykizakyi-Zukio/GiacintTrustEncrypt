@@ -72,7 +72,7 @@ class Program
                         WebHelper.OpenURL("https://github.com/Ykizakyi-Zukio");
                         break;
                     case "@pass":
-                        if (args.Length < 2) { Console.WriteLine("Invalid pass"); break; }
+                        if (args.Length < 2) { Debug.Warning("Invalid pass"); break; }
                         if (args[1].Length > 11)
                         {
                             key = new(HashHelper.Hash(args[1]));
@@ -80,7 +80,7 @@ class Program
                             binAes = new(key.Get());
                         }
                         else
-                            Console.WriteLine("No valid pass, minimal length is 12");
+                            Debug.Warning("No valid pass, minimal length is 12");
                         break;
                     case "@pass@v":
                         if (key != null)
@@ -90,9 +90,9 @@ class Program
                         break;
                     case "@pass@check":
                         if (key != null && args.Length > 1)
-                            if (key.Get() == HashHelper.Hash(args[1])) { Console.WriteLine($"{Color.green}✓ Correct pass!"); }
+                            if (key.Get() == HashHelper.Hash(args[1])) { Debug.Success($"Correct pass!"); }
                             else
-                                Console.WriteLine($"{Color.red}× Uncorrect pass");
+                                Debug.Warning("Uncorrect pass");
 
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
@@ -102,14 +102,14 @@ class Program
                         break;
                     case "@aes@ve":
                         if (key == null || aes == null) { Console.WriteLine("Invalid pass!"); break; };
-                        if (args[1].Length == 0) { Console.WriteLine("Invalid plane text!"); break; }
+                        if (args[1].Length == 0) { Debug.Warning("Invalid plane text!"); break; }
 
                         Console.WriteLine(aes.Encrypt(args[1]));
                         break;
 
                     case "@aes@vd":
                         if (key == null || aes == null) { Console.WriteLine("Invalid pass!"); break; }
-                        if (args[1].Length == 0) { Console.WriteLine("Invalid plane text!"); break; };
+                        if (args[1].Length == 0) { Debug.Warning("Invalid plane text!"); break; };
 
                         Console.WriteLine(aes.Decrypt(args[1]));
                         break;
@@ -126,9 +126,9 @@ class Program
                         if (args.Length <= 1) break;
                         args[1] = args[1].Trim('\"');
 
-                        if (aes == null) { Console.WriteLine("Invalid pass"); break; }
-                        if (!File.Exists(args[1])) { Console.WriteLine("File not found"); break; }
-                        if (args[1].EndsWith(".gte")) { Console.WriteLine("File already encrypted!"); break; }
+                        if (aes == null) { Debug.Warning("Invalid pass"); break; }
+                        if (!File.Exists(args[1])) { Debug.Warning("File not exists"); break; }
+                        if (args[1].EndsWith(".gte")) { Debug.Warning("File already encrypted!"); break; }
 
                         // Читаем оригинальный файл и шифруем
                         string fileData = StorageHelper.ReadFile(args[1]);
@@ -144,9 +144,9 @@ class Program
                         if (args.Length <= 1) break;
                         args[1] = args[1].Trim('\"');
 
-                        if (aes == null) { Console.WriteLine("Invalid pass"); break; }
-                        if (!File.Exists(args[1])) { Console.WriteLine("File not found"); break; }
-                        if (!args[1].EndsWith(".gte")) { Console.WriteLine("File not encrypted!"); break; }
+                        if (aes == null) { Debug.Warning("Invalid pass"); break; }
+                        if (!File.Exists(args[1])) { Debug.Warning("File not exists"); break; }
+                        if (!args[1].EndsWith(".gte")) { Debug.Warning("File not encrypted"); break; }
 
                         // Читаем зашифрованный файл и расшифровываем
                         string encryptedFile = StorageHelper.ReadFile(args[1]);
@@ -161,9 +161,9 @@ class Program
                         if (args.Length <= 1) break;
                         args[1] = args[1].Trim('\"');
 
-                        if (aes == null) { Console.WriteLine("Invalid pass"); break; }
-                        if (!File.Exists(args[1])) { Console.WriteLine("File not found"); break; }
-                        if (args[1].EndsWith(".gte")) { Console.WriteLine("File already encrypted!"); break; }
+                        if (aes == null) { Debug.Warning("Invalid pass"); break; }
+                        if (!File.Exists(args[1])) { Debug.Warning("File not exists"); break; }
+                        if (args[1].EndsWith(".gte")) { Debug.Warning("File already encrypted!"); break; }
 
                         byte[] fileBytes = File.ReadAllBytes(args[1]);
                         byte[] encryptedBytes = binAes.Encrypt(fileBytes);
@@ -176,9 +176,9 @@ class Program
                         if (args.Length <= 1) break;
                         args[1] = args[1].Trim('\"');
 
-                        if (aes == null) { Console.WriteLine("Invalid pass"); break; }
-                        if (!File.Exists(args[1])) { Console.WriteLine("File not found"); break; }
-                        if (!args[1].EndsWith(".gte")) { Console.WriteLine("File not encrypted!"); break; }
+                        if (aes == null) { Debug.Warning("Invalid pass"); break; }
+                        if (!File.Exists(args[1])) { Debug.Warning("File not exists"); break; }
+                        if (!args[1].EndsWith(".gte")) { Debug.Warning("File not encrypted"); break; }
 
                         byte[] _encryptedBytes = File.ReadAllBytes(args[1]);
                         byte[] _decryptedBytes = binAes.Decrypt(_encryptedBytes);
@@ -188,7 +188,7 @@ class Program
                         Console.WriteLine("File successfully decrypted!");
                         break;
                     case "@dir":
-                        if (args.Length < 2) { Console.WriteLine("Invalid directory arg."); break; }
+                        if (args.Length < 2) { Debug.Warning("Invalid args"); break; }
                         args[1] = args[1].Trim('\"');
                         string search = "*";
                         if (args[1].StartsWith('*'))
@@ -204,7 +204,7 @@ class Program
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
                 }
-            } catch (Exception ex) { Console.WriteLine($"× Error {Color.red}{ex.ToString()}"); Console.ForegroundColor = ConsoleColor.White; }
+            } catch (Exception ex) { Debug.Error(ex); }
         }
         
     }

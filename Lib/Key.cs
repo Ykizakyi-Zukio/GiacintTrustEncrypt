@@ -58,7 +58,6 @@ namespace GiacintTrustEncrypt.Lib
             // Перешифровываем заново с новым nonce
             Encrypt(Encoding.UTF8.GetString(decrypted));
 
-            //return Encoding.UTF8.GetString(decrypted);
             return decrypted;
         }
     }
