@@ -7,6 +7,6 @@
         internal static string reset = "\u001b[0m";        // Сброс форматирования
         internal static string red = "\u001b[38;5;217m"; // светло-розово-красный (почти пастельный)
         internal static string green = "\u001b[38;5;151m"; // светлый салатово-зелёный
-        internal static string yellow = "\\u001b[38;5;230m";
+        internal static string yellow = "\x1b[38;5;230m";
     }
 }

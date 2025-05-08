@@ -30,8 +30,13 @@ namespace GiacintTrustEncrypt.Lib
             Buffer.BlockCopy(ciphertext, 0, encryptedData, nonce.Length, ciphertext.Length);
             Buffer.BlockCopy(tag, 0, encryptedData, nonce.Length + ciphertext.Length, tag.Length);
         }
-        
-        internal string Get() => Encoding.UTF8.GetString(encryptedData);
+
+        internal string Get()
+        {
+            var decrypted = GetBytes();
+            return Encoding.UTF8.GetString(decrypted);
+        }
+
 
         internal byte[] GetBytes()
         {

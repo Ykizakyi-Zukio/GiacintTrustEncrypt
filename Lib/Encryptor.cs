@@ -11,7 +11,7 @@ namespace GiacintTrustEncrypt.Lib
         public Encryptor(string keyString)
         {
             if (keyString.Length != 32)
-                throw new ArgumentException("Ключ должен быть длиной 32 символа.");
+                throw new ArgumentException("Ключ должен быть длиной 32 символа." + keyString.Length);
 
             key = Encoding.UTF8.GetBytes(keyString);
         }

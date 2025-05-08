@@ -76,6 +76,7 @@ class Program
                         if (args[1].Length > 11)
                         {
                             key = new(HashHelper.Hash(args[1]));
+                            Console.WriteLine(key.Get() + ", " + key.Get().Length);
                             aes = new(key.Get());
                             binAes = new(key.Get());
                         }
@@ -98,7 +99,10 @@ class Program
                         break;
                     case "@hash@v":
                         if (args[1].Length > 0)
-                            Console.WriteLine(HashHelper.Hash(args[1]));
+                        {
+                            var hash = HashHelper.Hash(args[1]);
+                            Console.WriteLine(hash + ", " + hash.Length);
+                        }
                         break;
                     case "@aes@ve":
                         if (key == null || aes == null) { Console.WriteLine("Invalid pass!"); break; };
