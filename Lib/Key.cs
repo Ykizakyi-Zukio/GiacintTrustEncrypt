@@ -1,5 +1,4 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace GiacintTrustEncrypt.Lib
@@ -31,8 +30,10 @@ namespace GiacintTrustEncrypt.Lib
             Buffer.BlockCopy(ciphertext, 0, encryptedData, nonce.Length, ciphertext.Length);
             Buffer.BlockCopy(tag, 0, encryptedData, nonce.Length + ciphertext.Length, tag.Length);
         }
+        
+        internal string Get() => Encoding.UTF8.GetString(encryptedData);
 
-        public string Get()
+        internal byte[] GetBytes()
         {
             int nonceLen = 12;
             int tagLen = 16;
@@ -57,7 +58,8 @@ namespace GiacintTrustEncrypt.Lib
             // Перешифровываем заново с новым nonce
             Encrypt(Encoding.UTF8.GetString(decrypted));
 
-            return Encoding.UTF8.GetString(decrypted);
+            //return Encoding.UTF8.GetString(decrypted);
+            return decrypted;
         }
     }
 }
