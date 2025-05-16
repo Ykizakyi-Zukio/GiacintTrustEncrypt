@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.ComponentModel.Design.Serialization;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text;
 using GiacintTrustEncrypt.Lib;
@@ -25,13 +26,18 @@ class Program
         "@d <filePath> - decrypt file and create file withount .gte", 
         "@dir <*.extension>pathDirectory> or @dir <pathDirectory> - show all files from directory",
         "@e@bin <filePath> - encrypt binary file (video, audio)",
-        "@d@bin <filePath> - decrypt binary file (video, audio)"
+        "@d@bin <filePath> - decrypt binary file (video, audio)",
+        "@ec - encrypt selected file (works if file opened by assotiation)",
+        "@dc - decrypt selected file (works if file opened by assotiation)",
     };
 
     private string currentFile;
 
     static void Main(string[] args)
     {
+        //IF STARTUP BY FILE, FIXING A COLORS
+        Root.EnableVirtualTerminal();
+
         if (args.Length == 0)
         {
             try
@@ -41,12 +47,12 @@ class Program
                     string runExt = StorageHelper.ReturnExists(@$"{Environment.CurrentDirectory}\GiacintTrustEncrypt.exe", @$"{Environment.CurrentDirectory}\GiacintTrustEncrypt");
                     Association association = new(".gte", "GiacintTrustEncrypt", runExt);
                     association.SetAssociation();
-                    Debug.Success("Assotiation created");
+                    Debug.Success("Assotiation created\r\n");
                 }
                 else
-                    Debug.Success("Assotiation processed");
+                    Debug.Success("Assotiation processed\r\n");
             }
-            catch (Exception e) { Debug.Error(e); File.Delete(@$"{Environment.CurrentDirectory}\assotiation.dat"); }
+            catch (Exception e) { Debug.Warning("Assotiation not created, if you want use file assotiations open app by administrator permissions.\r\n"); File.Delete(@$"{Environment.CurrentDirectory}\assotiation.dat"); }
         }
 
         Program main = new();
@@ -143,7 +149,6 @@ class Program
 
                         Console.WriteLine(aes.Encrypt(args[1]));
                         break;
-
                     case "@aes@vd":
                         if (key == null || aes == null) { Console.WriteLine("Invalid pass!"); break; }
                         if (args[1].Length == 0) { Debug.Warning("Invalid plane text!"); break; };
@@ -157,7 +162,6 @@ class Program
                         Console.Clear();
                         WelcomeMessage();
                         break;
-
                     //FILES & DIRECTORIES
                     case "@e":
                         if (args.Length <= 1) break;
