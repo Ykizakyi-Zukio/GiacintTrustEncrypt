@@ -177,6 +177,7 @@ class Program
                         Console.WriteLine("File successfully encrypted!");
                         break;
                     case "@ec":
+                        if (currentFile == null) { Debug.Warning("Invalid current file"); break; }
                         args = new string[2];
                         args[1] = currentFile;
                         goto case "@e";
@@ -198,6 +199,7 @@ class Program
                         Console.WriteLine("File successfully decrypted!");
                         break;
                     case "@dc":
+                        if (currentFile == null) { Debug.Warning("Invalid current file"); break; }
                         args = new string[2];
                         args[1] = currentFile;
                         goto case "@d";
