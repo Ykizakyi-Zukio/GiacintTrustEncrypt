@@ -20,11 +20,11 @@ class Program
         "@aes@vd <data> - fast decrypt data",
         "@help - view all commands",
         "@c - clear cmd",
-        "@e@file <filePath> - encrypt file and create .gte file",
-        "@d@file <filePath> - decrypt file and create file withount .gte", 
+        "@e <filePath> - encrypt file and create .gte file",
+        "@d <filePath> - decrypt file and create file withount .gte", 
         "@dir <*.extension>pathDirectory> or @dir <pathDirectory> - show all files from directory",
-        "@e@fbin <filePath> - encrypt binary file (video, audio)",
-        "@d@fbin <filePath> - decrypt binary file (video, audio)"
+        "@e@bin <filePath> - encrypt binary file (video, audio)",
+        "@d@bin <filePath> - decrypt binary file (video, audio)"
     };
 
     static void Main()
@@ -126,7 +126,7 @@ class Program
                         break;
 
                     //FILES & DIRECTORIES
-                    case "@e@file":
+                    case "@e":
                         if (args.Length <= 1) break;
                         args[1] = args[1].Trim('\"');
 
@@ -144,7 +144,7 @@ class Program
                         Console.WriteLine("File successfully encrypted!");
                         break;
 
-                    case "@d@file":
+                    case "@d":
                         if (args.Length <= 1) break;
                         args[1] = args[1].Trim('\"');
 
@@ -161,7 +161,7 @@ class Program
 
                         Console.WriteLine("File successfully decrypted!");
                         break;
-                    case "@e@fbin":
+                    case "@e@bin":
                         if (args.Length <= 1) break;
                         args[1] = args[1].Trim('\"');
 
@@ -176,7 +176,7 @@ class Program
 
                         Console.WriteLine("File sucessfully encrypted!");
                         break;
-                    case "@d@fbin":
+                    case "@d@bin":
                         if (args.Length <= 1) break;
                         args[1] = args[1].Trim('\"');
 
