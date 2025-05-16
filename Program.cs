@@ -27,7 +27,7 @@ class Program
         "@d@bin <filePath> - decrypt binary file (video, audio)"
     };
 
-    static void Main()
+    static void Main(string[] args)
     {
         string runExt = StorageHelper.ReturnExists(@$"{Environment.CurrentDirectory}+\GiacintTrustEncrypt.exe", @$"{Environment.CurrentDirectory}+\GiacintTrustEncrypt");
         if (StorageHelper.CreateDat(@$"{Environment.CurrentDirectory}\assotiation.dat", "0") == false)
