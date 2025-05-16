@@ -58,16 +58,9 @@ class Program
             Debug.Success($"Processed file: {main.currentFile}");
             Console.Write(
                         Color.ultraLightPink + "\r\n" +
-                        "Enter password to boot encrypt: ");
+                        "Use @pass to enter password\r\n" +
+                        "Use @ec / @dc to encrypt / decrypt\r\n\r\n");
             Console.ForegroundColor = ConsoleColor.White;
-
-            //string userArg = Console.ReadLine();
-
-            while (true)
-            {
-                string userArg = Console.ReadLine();
-                main.CommandsInit();
-            }
         }
 
         //DEFUALT RUN
@@ -183,7 +176,10 @@ class Program
 
                         Console.WriteLine("File successfully encrypted!");
                         break;
-
+                    case "@ec":
+                        args = new string[2];
+                        args[1] = currentFile;
+                        goto case "@e";
                     case "@d":
                         if (args.Length <= 1) break;
                         args[1] = args[1].Trim('\"');
@@ -201,6 +197,10 @@ class Program
 
                         Console.WriteLine("File successfully decrypted!");
                         break;
+                    case "@dc":
+                        args = new string[2];
+                        args[1] = currentFile;
+                        goto case "@d";
                     case "@e@bin":
                         if (args.Length <= 1) break;
                         args[1] = args[1].Trim('\"');
