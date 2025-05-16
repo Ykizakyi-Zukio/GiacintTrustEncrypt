@@ -83,8 +83,8 @@ class Program
                                     "         Github: https://github.com/Ykizakyi-Zukio \r\n" +
                                     "      ~ ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\r\n\r\n\r\n");
 
-        Console.Write("To start using write your pass for contuite encrypt/decrypt: \r\n" +
-            "@pass <pass>\r\n" +
+        Console.Write("Write your pass: \r\n" +
+            "@pass <pass>\r\n\r\n" +
             "@help (Get all commands\r\n" +
             "@m@git (Go to author github)\r\n\r\n");
 
