@@ -35,7 +35,7 @@ class Program
 
     static void Main(string[] args)
     {
-        //IF STARTUP BY FILE, FIXING A COLORS
+        //IF STARTUP BY ADMIN PERMS, FIXING A COLORS
         Root.EnableVirtualTerminal();
 
         if (args.Length == 0)
