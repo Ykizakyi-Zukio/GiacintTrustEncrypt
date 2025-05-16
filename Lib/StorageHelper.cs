@@ -58,5 +58,25 @@
         {
             Console.WriteLine("Processed file '{0}'.", path);
         }
+
+        internal static bool CreateDat(string path, string content)
+        {
+            if (File.Exists(path))
+                return true;
+            else
+                CreateFile(path, content);
+            
+            return false;
+        }
+
+        internal static string ReturnExists(string first, string second)
+        {
+            if (File.Exists(first))
+                return first;
+            else if (File.Exists(second))
+                return second;
+
+            throw new Exception("Not any file exists");
+        }
     }
 }

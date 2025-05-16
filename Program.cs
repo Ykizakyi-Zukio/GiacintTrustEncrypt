@@ -29,7 +29,17 @@ class Program
 
     static void Main()
     {
-        Program main = new();
+        string runExt = StorageHelper.ReturnExists(@$"{Environment.CurrentDirectory}+\GiacintTrustEncrypt.exe", @$"{Environment.CurrentDirectory}+\GiacintTrustEncrypt");
+        if (StorageHelper.CreateDat(@$"{Environment.CurrentDirectory}\assotiation.dat", "0") == false)
+        {
+            Association association = new(".gte", "GiacintTrustEncrypt", runExt);
+            association.SetAssociation();
+            Debug.Success("Assotiation created");
+        }
+        else
+            Debug.Success("Assotiation processed");
+
+            Program main = new();
         Console.OutputEncoding = Encoding.UTF8;
         main.WelcomeMessage();
         main.CommandsInit();
