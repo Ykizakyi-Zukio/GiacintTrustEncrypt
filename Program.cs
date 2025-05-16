@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text;
 using GiacintTrustEncrypt.Lib;
 
@@ -27,20 +28,49 @@ class Program
         "@d@bin <filePath> - decrypt binary file (video, audio)"
     };
 
+    private string currentFile;
+
     static void Main(string[] args)
     {
-        string runExt = StorageHelper.ReturnExists(@$"{Environment.CurrentDirectory}+\GiacintTrustEncrypt.exe", @$"{Environment.CurrentDirectory}+\GiacintTrustEncrypt");
-        if (StorageHelper.CreateDat(@$"{Environment.CurrentDirectory}\assotiation.dat", "0") == false)
+        if (args.Length == 0)
         {
-            Association association = new(".gte", "GiacintTrustEncrypt", runExt);
-            association.SetAssociation();
-            Debug.Success("Assotiation created");
+            try
+            {
+                if (StorageHelper.CreateDat(@$"{Environment.CurrentDirectory}\assotiation.dat", "1") == false)
+                {
+                    string runExt = StorageHelper.ReturnExists(@$"{Environment.CurrentDirectory}\GiacintTrustEncrypt.exe", @$"{Environment.CurrentDirectory}\GiacintTrustEncrypt");
+                    Association association = new(".gte", "GiacintTrustEncrypt", runExt);
+                    association.SetAssociation();
+                    Debug.Success("Assotiation created");
+                }
+                else
+                    Debug.Success("Assotiation processed");
+            }
+            catch (Exception e) { Debug.Error(e); File.Delete(@$"{Environment.CurrentDirectory}\assotiation.dat"); }
         }
-        else
-            Debug.Success("Assotiation processed");
 
-            Program main = new();
+        Program main = new();
         Console.OutputEncoding = Encoding.UTF8;
+
+        if (args.Length > 0 )
+        {
+            main.currentFile = args[0];
+            Debug.Success($"Processed file: {main.currentFile}");
+            Console.Write(
+                        Color.ultraLightPink + "\r\n" +
+                        "Enter password to boot encrypt: ");
+            Console.ForegroundColor = ConsoleColor.White;
+
+            //string userArg = Console.ReadLine();
+
+            while (true)
+            {
+                string userArg = Console.ReadLine();
+                main.CommandsInit();
+            }
+        }
+
+        //DEFUALT RUN
         main.WelcomeMessage();
         main.CommandsInit();
     }
@@ -48,11 +78,11 @@ class Program
     private void WelcomeMessage()
     {
 
-        Console.Write($"{Color.pink}/)  /)~ ┏━━━━━━━━━━━━━━━━━┓\r\n" +
-            "( •-• )  ~ ♡ Welcome to Giacint Trust Encrypt\r\n" +
-            "♡/づづ   Author: @YZukio\r\n" +
-            "         Github: https://github.com/Ykizakyi-Zukio \r\n" +
-            "      ~ ┗━━━━━━━━━━━━━━━━━┛\r\n\r\n\r\n");
+        Console.Write($"{Color.pink}/)  /)~ ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\r\n" +
+                                    "( •-• )  ~ ♡ Welcome to Giacint Trust Encrypt\r\n" +
+                                    "♡/づづ   Author: @YZukio\r\n" +
+                                    "         Github: https://github.com/Ykizakyi-Zukio \r\n" +
+                                    "      ~ ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\r\n\r\n\r\n");
 
         Console.Write("To start using write your pass for contuite encrypt/decrypt: \r\n" +
             "@pass <pass>\r\n" +

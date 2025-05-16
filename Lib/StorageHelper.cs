@@ -76,7 +76,7 @@
             else if (File.Exists(second))
                 return second;
 
-            throw new Exception("Not any file exists");
+            throw new Exception($"Not any file exists: {first}, {second}");
         }
     }
 }
