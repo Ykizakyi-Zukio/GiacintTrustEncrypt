@@ -14,26 +14,6 @@ class Program
 
     AppConfig config = new();
 
-    List<string> cmds = new List<string> { 
-        "@m@git - open author github",
-        "@update - view latest release",
-        "@pass <pass> - password for encryption", 
-        "@pass@v - view hash key by pass", 
-        "@pass@check <pass> - check validate of pass", 
-        "@hash@v <data> - data to hash", 
-        "@aes@ve <data> - fast encrypt data",
-        "@aes@vd <data> - fast decrypt data",
-        "@help - view all commands",
-        "@c - clear cmd",
-        "@e <filePath> - encrypt file and create .gte file",
-        "@d <filePath> - decrypt file and create file withount .gte", 
-        "@dir <*.extension>pathDirectory> or @dir <pathDirectory> - show all files from directory",
-        "@e@bin <filePath> - encrypt binary file (video, audio)",
-        "@d@bin <filePath> - decrypt binary file (video, audio)",
-        "@ec - encrypt selected file (works if file opened by assotiation)",
-        "@dc - decrypt selected file (works if file opened by assotiation)",
-    };
-
     private string currentFile;
 
     static void Main(string[] args)
@@ -191,7 +171,7 @@ class Program
                         if (aes == null) { Debug.Warning("Invalid pass"); break; }
                         if (!File.Exists(args[1])) { Debug.Warning("File not exists"); break; }
                         if (args[1].EndsWith(".gte")) { Debug.Warning("File already encrypted!"); break; }
-                        if (config.binaryExtensions.Contains(args[1].Substring(args[1].IndexOf("."))))
+                        if (config.BinaryExtensions.Contains(args[1].Substring(args[1].IndexOf("."))))
                         {
                             goto case "@e@bin";
                         }
@@ -217,7 +197,7 @@ class Program
                         if (aes == null) { Debug.Warning("Invalid pass"); break; }
                         if (!File.Exists(args[1])) { Debug.Warning("File not exists"); break; }
                         if (!args[1].EndsWith(".gte")) { Debug.Warning("File not encrypted"); break; }
-                        if (config.binaryExtensions.Contains(args[1].Substring(args[1].IndexOf(".")).Replace(".gte", "")))
+                        if (config.BinaryExtensions.Contains(args[1].Substring(args[1].IndexOf(".")).Replace(".gte", "")))
                         {
                             goto case "@d@bin";
                         }
@@ -301,7 +281,7 @@ class Program
     {
         Console.WriteLine(Color.BMain);
 
-        for (int i = 0; i < cmds.Count; i++) { Console.WriteLine(cmds[i]); }
+        for (int i = 0; i < config.Cmds.Length; i++) { Console.WriteLine(config.Cmds[i]); }
 
         Console.WriteLine("\r\n");
         Console.ForegroundColor= ConsoleColor.White;

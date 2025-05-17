@@ -2,7 +2,8 @@
 {
     internal class AppConfig
     {
-        internal readonly string[] binaryExtensions = {
+        //ARRAYS
+        internal readonly string[] BinaryExtensions = {
         ".exe", ".dll", ".bin", ".so", ".out", ".elf", ".apk", ".app",
         ".lib", ".obj", ".a", ".pyd",
         ".iso", ".img", ".rom", ".hex", ".cue",
@@ -15,10 +16,29 @@
         ".resx", ".rsc", ".icns", ".ico",
         ".msi", ".cab", ".vhd", ".vhdx"
         };
+        internal readonly string[] Cmds = {
+        "@m@git - open author github",
+        "@update - view latest release",
+        "@pass <pass> - password for encryption",
+        "@pass@v - view hash key by pass",
+        "@pass@check <pass> - check validate of pass",
+        "@hash@v <data> - data to hash",
+        "@aes@ve <data> - fast encrypt data",
+        "@aes@vd <data> - fast decrypt data",
+        "@help - view all commands",
+        "@c - clear cmd",
+        "@e <filePath> - encrypt file and create .gte file",
+        "@d <filePath> - decrypt file and create file withount .gte",
+        "@dir <*.extension>pathDirectory> or @dir <pathDirectory> - show all files from directory",
+        "@e@bin <filePath> - encrypt binary file (video, audio)",
+        "@d@bin <filePath> - decrypt binary file (video, audio)",
+        "@ec - encrypt selected file (works if file opened by assotiation)",
+        "@dc - decrypt selected file (works if file opened by assotiation)",
+        };
 
         //INT
-        internal int minimalPassLength { get; set; } = 8;
-        internal int minimalRecommendedPassLength { get; set; } = 12;
+        internal int MinimalPassLength { get; set; } = 8;
+        internal int MinimalRecommendedPassLength { get; set; } = 12;
 
     }
 }
