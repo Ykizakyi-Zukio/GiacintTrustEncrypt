@@ -34,7 +34,7 @@
 
                 foreach (string file in files) { Console.WriteLine("Processed file '{0}.'", file); }
             }
-            catch (Exception e) { Console.WriteLine(Color.red + e.ToString() + Color.ultraLightPink); }
+            catch (Exception e) { Debug.Error(e); }
         }
 
         internal static void ProcessDirectoryAll(string targetDirectory)
@@ -51,7 +51,7 @@
                 foreach (string subdirectory in subdirectoryEntries)
                     ProcessDirectoryAll(subdirectory);
             }
-            catch (Exception e) { Console.WriteLine(Color.red + e.ToString() + Color.ultraLightPink); }
+            catch (Exception e) { Console.WriteLine(Color.Error + e.ToString() + Color.BMain); }
         }
 
         internal static void ProcessFile(string path)

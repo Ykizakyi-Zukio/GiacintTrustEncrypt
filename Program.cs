@@ -13,7 +13,8 @@ class Program
     BinaryEncryptor binAes;
 
     List<string> cmds = new List<string> { 
-        "@m@git - open author github", 
+        "@m@git - open author github",
+        "@update - view latest release",
         "@pass <pass> - password for encryption", 
         "@pass@v - view hash key by pass", 
         "@pass@check <pass> - check validate of pass", 
@@ -58,26 +59,39 @@ class Program
         Program main = new();
         Console.OutputEncoding = Encoding.UTF8;
 
-        if (args.Length > 0 )
+        if (args.Length > 0)
         {
             main.currentFile = args[0];
+            FileInfo fi = new FileInfo(main.currentFile);
+            string shortContent = fi.Length > 256 ? StorageHelper.ReadFile(main.currentFile).Remove(256) + $"... {fi.Length}" : StorageHelper.ReadFile(main.currentFile);
+
             Debug.Success($"Processed file: {main.currentFile}");
             Console.Write(
-                        Color.ultraLightPink + "\r\n" +
+                        Color.BMain + "\r\n" +
+                        fi.Name + "\r\n "+
+                        "Creation, last edit time: \r\n" +
+                        File.GetCreationTime(main.currentFile) + "\r\n" +
+                        File.GetLastWriteTime(main.currentFile) +
+                        
+                        "\r\n\r\nShort content: \r\n" +
+                        shortContent + "\r\n\r\n" +
                         "Use @pass to enter password\r\n" +
                         "Use @ec / @dc to encrypt / decrypt\r\n\r\n");
             Console.ForegroundColor = ConsoleColor.White;
+            main.CommandsInit();
         }
-
-        //DEFUALT RUN
-        main.WelcomeMessage();
-        main.CommandsInit();
+        else
+        {
+            //DEFUALT RUN
+            main.WelcomeMessage();
+            main.CommandsInit();
+        }
     }
 
     private void WelcomeMessage()
     {
 
-        Console.Write($"{Color.pink}/)  /)~ ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\r\n" +
+        Console.Write($"{Color.AMain}/)  /)~ ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\r\n" +
                                     "( •-• )  ~ ♡ Welcome to Giacint Trust Encrypt\r\n" +
                                     "♡/づづ   Author: @YZukio\r\n" +
                                     "         Github: https://github.com/Ykizakyi-Zukio \r\n" +
@@ -107,26 +121,31 @@ class Program
                 switch (mc)
                 {
                     //MAIN COMMANDS
+                    case "@update":
+                        WebHelper.OpenURL("https://github.com/Ykizakyi-Zukio/GiacintTrustEncrypt/releases/latest");
+                        break;
                     case "@m@git":
                         WebHelper.OpenURL("https://github.com/Ykizakyi-Zukio");
                         break;
                     case "@pass":
                         if (args.Length < 2) { Debug.Warning("Invalid pass"); break; }
-                        if (args[1].Length > 11)
+                        if (args[1].Length < 12) Debug.Warning("Recommended minimal length of pass is 12 symbols UTF-8");
+                            if (args[1].Length >= 8)
                         {
                             key = new(HashHelper.Hash(args[1]));
-                            Console.WriteLine(key.Get() + ", " + key.Get().Length);
+                            Debug.Success("Your encryption key created");
+                            Debug.Info("To view his use: @pass@v");
                             aes = new(key.Get());
                             binAes = new(key.Get());
                         }
                         else
-                            Debug.Warning("No valid pass, minimal length is 12");
+                            Debug.Warning("No valid pass, minimal length is 8");
                         break;
                     case "@pass@v":
                         if (key != null)
                             Console.WriteLine(key.Get());
                         else
-                            Console.WriteLine("Pass not initializated!");
+                            Debug.Warning("Pass not initializated!");
                         break;
                     case "@pass@check":
                         if (key != null && args.Length > 1)
@@ -249,7 +268,7 @@ class Program
 
                         //if (Directory.Exists(args[1])) { Console.WriteLine("Invalid directory."); break; }
 
-                        Console.WriteLine($"{Color.ultraLightPink} Directory {args[1]}:)");
+                        Console.WriteLine($"{Color.BMain} Directory {args[1]}:)");
                         StorageHelper.ProcessDirectory(args[1], search);
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
@@ -261,7 +280,7 @@ class Program
 
     private void HelpMessage()
     {
-        Console.WriteLine(Color.ultraLightPink);
+        Console.WriteLine(Color.BMain);
 
         for (int i = 0; i < cmds.Count; i++) { Console.WriteLine(cmds[i]); }
 
