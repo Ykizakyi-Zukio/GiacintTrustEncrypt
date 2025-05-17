@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.Design.Serialization;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Text;
 using GiacintTrustEncrypt.Lib;
 
 namespace GiacintTrustEncrypt;
@@ -74,7 +71,7 @@ class Program
     {
 
         Console.Write($"{Color.AMain}/)  /)~ ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\r\n" +
-                                    "( •-• )  ~ ♡ Welcome to Giacint Trust Encrypt\r\n" +
+                                    "( •-• )  ~ ♡ Welcome to Giacint Trust Encrypt ♡ ~\r\n" +
                                     "♡/づづ   Author: @YZukio\r\n" +
                                     "         Github: https://github.com/Ykizakyi-Zukio \r\n" +
                                     "      ~ ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\r\n\r\n\r\n");
