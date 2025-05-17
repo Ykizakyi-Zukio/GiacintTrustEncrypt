@@ -283,7 +283,16 @@ class Program
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
                 }
-            } catch (Exception ex) { Debug.Error(ex); }
+            } 
+            catch (Exception ex) 
+            { 
+                if (ex.ToString().StartsWith("System.Security.Cryptography.CryptographicException: Padding is invalid and cannot be removed."))
+                {
+                    Debug.Error(new Exception("Your pass is incorrect of pass by file was encrypted!"));
+                }
+                else
+                    Debug.Error(ex); 
+            }
         }
         
     }
