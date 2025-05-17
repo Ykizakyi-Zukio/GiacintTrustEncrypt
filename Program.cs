@@ -12,6 +12,8 @@ class Program
     Encryptor aes;
     BinaryEncryptor binAes;
 
+    AppConfig config = new();
+
     List<string> cmds = new List<string> { 
         "@m@git - open author github",
         "@update - view latest release",
@@ -99,7 +101,7 @@ class Program
 
         Console.Write("Write your pass: \r\n" +
             "@pass <pass>\r\n\r\n" +
-            "@help (Get all commands\r\n" +
+            "@help (Get all commands)\r\n" +
             "@m@git (Go to author github)\r\n\r\n");
 
         Console.ForegroundColor = ConsoleColor.White;
@@ -189,6 +191,10 @@ class Program
                         if (aes == null) { Debug.Warning("Invalid pass"); break; }
                         if (!File.Exists(args[1])) { Debug.Warning("File not exists"); break; }
                         if (args[1].EndsWith(".gte")) { Debug.Warning("File already encrypted!"); break; }
+                        if (config.binaryExtensions.Contains(args[1].Substring(args[1].IndexOf("."))))
+                        {
+                            goto case "@e@bin";
+                        }
 
                         // Читаем оригинальный файл и шифруем
                         string fileData = StorageHelper.ReadFile(args[1]);
@@ -211,6 +217,10 @@ class Program
                         if (aes == null) { Debug.Warning("Invalid pass"); break; }
                         if (!File.Exists(args[1])) { Debug.Warning("File not exists"); break; }
                         if (!args[1].EndsWith(".gte")) { Debug.Warning("File not encrypted"); break; }
+                        if (config.binaryExtensions.Contains(args[1].Substring(args[1].IndexOf(".")).Replace(".gte", "")))
+                        {
+                            goto case "@d@bin";
+                        }
 
                         // Читаем зашифрованный файл и расшифровываем
                         string encryptedFile = StorageHelper.ReadFile(args[1]);
