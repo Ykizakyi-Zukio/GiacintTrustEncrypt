@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace GiacintTrustEncrypt.Lib
 {
     [JsonSerializable(typeof(AppConfig))]
-    internal class AppConfig
+    public class AppConfig
     {
         //ARRAYS
         [JsonIgnore]
@@ -54,7 +54,7 @@ namespace GiacintTrustEncrypt.Lib
             StorageHelper.CreateFile(path, json);
         }
 
-        public AppConfig FromJson(string json)
+        internal AppConfig FromJson(string json)
         {
             AppConfig obj = new();
             try

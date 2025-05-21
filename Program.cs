@@ -303,11 +303,20 @@ class Program
                     {
                         if (args[1] == null) { Debug.Warning("Invalid param"); break; }
                         if (args[2] == null) { Debug.Warning("Invalid content"); break; }
-                        FieldInfo field = typeof(AppConfig).GetField(args[1]);
+                        FieldInfo field = typeof(AppConfig).GetField(args[1], BindingFlags.Public);
                         string value = (string)field.GetValue(config);
                         field.SetValue(config, value);
                         Debug.Success($"{field.Name} is now {field.GetValue}");
                     } catch { Debug.Error(new Exception("Error in parameter set")); }
+                    break;
+                case "param@get@all":
+                    Type type = typeof(AppConfig);
+                    FieldInfo[] fields = type.GetFields(BindingFlags.Public);
+
+                    foreach (var field in fields)
+                    {
+                        Console.WriteLine($"{field.FieldType.Name} {field.Name} ({field.Attributes})");
+                    }
                     break;
                 case "assotiation@unlink":
                     string runExt = StorageHelper.ReturnExists(@$"{Environment.CurrentDirectory}\GiacintTrustEncrypt.exe", @$"{Environment.CurrentDirectory}\GiacintTrustEncrypt");
