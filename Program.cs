@@ -37,6 +37,13 @@ class Program
 
         Program main = new();
         Console.OutputEncoding = Encoding.UTF8;
+        AppDomain.CurrentDomain.ProcessExit += main.OnExit;
+
+        if (File.Exists($"{Environment.CurrentDirectory}/config.json"))
+        {
+            main.config = main.config.FromJson(StorageHelper.ReadFile($"{Environment.CurrentDirectory}/config.json"));
+            Debug.Success("Config loaded");
+        }
 
         if (args.Length > 0)
         {
@@ -108,8 +115,8 @@ class Program
                         break;
                     case "@pass":
                         if (args.Length < 2) { Debug.Warning("Invalid pass"); break; }
-                        if (args[1].Length < 12) Debug.Warning("Recommended minimal length of pass is 12 symbols UTF-8");
-                            if (args[1].Length >= 8)
+                        if (args[1].Length < config.MinimalRecommendedPassLength) Debug.Warning("Recommended minimal length of pass is 12 symbols UTF-8");
+                            if (args[1].Length >= config.MinimalPassLength)
                         {
                             key = new(HashHelper.Hash(args[1]));
                             Debug.Success("Your encryption key created");
@@ -282,5 +289,10 @@ class Program
 
         Console.WriteLine("\r\n");
         Console.ForegroundColor= ConsoleColor.White;
+    }
+
+    private void OnExit(object sender, EventArgs e)
+    {
+        config.ToJson(@$"{Environment.CurrentDirectory}/config.json");
     }
 }
