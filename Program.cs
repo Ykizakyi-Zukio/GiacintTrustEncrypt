@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using GiacintTrustEncrypt.Lib;
+using System.Reflection;
 
 namespace GiacintTrustEncrypt;
 
@@ -26,6 +27,8 @@ class Program
                 {
                     string runExt = StorageHelper.ReturnExists(@$"{Environment.CurrentDirectory}\GiacintTrustEncrypt.exe", @$"{Environment.CurrentDirectory}\GiacintTrustEncrypt");
                     Association association = new(".gte", "GiacintTrustEncrypt", runExt);
+
+
                     association.SetAssociation();
                     Debug.Success("Assotiation created\r\n");
                 }
@@ -266,6 +269,9 @@ class Program
                         StorageHelper.ProcessDirectory(args[1], search);
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
+                    case "@root":
+                        RootCommands();
+                        break;
                 }
             } 
             catch (Exception ex) 
@@ -279,6 +285,32 @@ class Program
             }
         }
         
+    }
+
+    private void RootCommands()
+    {
+        string message = Console.ReadLine() ?? "@null";
+        string[] args = message.Split(" ");
+
+        switch (args[1])
+        {
+            case "param@set":
+                try
+                {
+                    if (args[2] == null) { Debug.Warning("Invalid param"); }
+                    if (args[3] == null) { Debug.Warning("Invalid content"); }
+                    FieldInfo field = typeof(AppConfig).GetField(args[2]);
+                    string value = (string)field.GetValue(config);
+                    field.SetValue(config, value);
+                    Debug.Success($"{field.Name} is now {field.GetValue}");
+                } catch (Exception ex) {  Debug.Error(ex); }
+                break;
+            case "assotiation@unlink":
+                string runExt = StorageHelper.ReturnExists(@$"{Environment.CurrentDirectory}\GiacintTrustEncrypt.exe", @$"{Environment.CurrentDirectory}\GiacintTrustEncrypt");
+                Association association = new(".gte", "GiacintTrustEncrypt", runExt);
+                association.RemoveAssociation();
+                break;
+        }
     }
 
     private void HelpMessage()
