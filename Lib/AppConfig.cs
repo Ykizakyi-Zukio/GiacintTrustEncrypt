@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace GiacintTrustEncrypt.Lib
 {
+    [JsonSerializable(typeof(AppConfig))]
     internal class AppConfig
     {
         //ARRAYS
@@ -40,7 +41,6 @@ namespace GiacintTrustEncrypt.Lib
         };
 
         //INT
-        [JsonSerializable]
         internal int MinimalPassLength { get; set; } = 8;
         internal int MinimalRecommendedPassLength { get; set; } = 12;
 
