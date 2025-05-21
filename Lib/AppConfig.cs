@@ -43,7 +43,6 @@ namespace GiacintTrustEncrypt.Lib
         };
 
         //INT
-        [JsonRequired]
         internal int MinimalPassLength { get; set; } = 8;
         internal int MinimalRecommendedPassLength { get; set; } = 12;
 
@@ -53,11 +52,16 @@ namespace GiacintTrustEncrypt.Lib
             StorageHelper.CreateFile(path, json);
         }
 
-        public AppConfig() { }
-
-        public AppConfig(string json)
+        public AppConfig FromJson(string json)
         {
+            AppConfig obj = new();
+            try
+            {
+                obj = JsonSerializer.Deserialize<AppConfig>(json);
+            }
+            catch (Exception ex) { Debug.Error(ex);}
 
+            return obj;
         }
 
     }
