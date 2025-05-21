@@ -272,7 +272,7 @@ class Program
                     case "@root":
                         Console.Clear();
                         RootCommands();
-                        break;
+                        return;
                 }
             } 
             catch (Exception ex) 
@@ -294,30 +294,32 @@ class Program
         string message = Console.ReadLine() ?? "@null";
         string[] args = message.Split(" ");
 
-
-        switch (args[0])
+        while (true)
         {
-            case "param@set":
-                try
-                {
-                    if (args[1] == null) { Debug.Warning("Invalid param"); break; }
-                    if (args[2] == null) { Debug.Warning("Invalid content"); break;  }
-                    FieldInfo field = typeof(AppConfig).GetField(args[2]);
-                    string value = (string)field.GetValue(config);
-                    field.SetValue(config, value);
-                    Debug.Success($"{field.Name} is now {field.GetValue}");
-                } catch { Debug.Error(new Exception("Error in parameter set")); }
-                break;
-            case "assotiation@unlink":
-                string runExt = StorageHelper.ReturnExists(@$"{Environment.CurrentDirectory}\GiacintTrustEncrypt.exe", @$"{Environment.CurrentDirectory}\GiacintTrustEncrypt");
-                Association association = new(".gte", "GiacintTrustEncrypt", runExt);
-                association.RemoveAssociation();
-                break;
-            case "exit":
-                Console.Clear();
-                WelcomeMessage();
-                CommandsInit();
-                return;
+            switch (args[0])
+            {
+                case "param@set":
+                    try
+                    {
+                        if (args[1] == null) { Debug.Warning("Invalid param"); break; }
+                        if (args[2] == null) { Debug.Warning("Invalid content"); break; }
+                        FieldInfo field = typeof(AppConfig).GetField(args[1]);
+                        string value = (string)field.GetValue(config);
+                        field.SetValue(config, value);
+                        Debug.Success($"{field.Name} is now {field.GetValue}");
+                    } catch { Debug.Error(new Exception("Error in parameter set")); }
+                    break;
+                case "assotiation@unlink":
+                    string runExt = StorageHelper.ReturnExists(@$"{Environment.CurrentDirectory}\GiacintTrustEncrypt.exe", @$"{Environment.CurrentDirectory}\GiacintTrustEncrypt");
+                    Association association = new(".gte", "GiacintTrustEncrypt", runExt);
+                    association.RemoveAssociation();
+                    break;
+                case "exit":
+                    Console.Clear();
+                    WelcomeMessage();
+                    CommandsInit();
+                    return;
+            }
         }
     }
 

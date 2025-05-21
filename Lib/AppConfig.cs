@@ -44,9 +44,9 @@ namespace GiacintTrustEncrypt.Lib
 
         //INT
         [JsonInclude]
-        internal int MinimalPassLength { get; set; } = 8;
+        public int MinimalPassLength { get; set; } = 8;
         [JsonInclude]
-        internal int MinimalRecommendedPassLength { get; set; } = 12;
+        public int MinimalRecommendedPassLength { get; set; } = 12;
 
         internal void ToJson(string path)
         {
