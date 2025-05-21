@@ -71,7 +71,7 @@ class Program
     {
 
         Console.Write($"{Color.AMain}/)  /)~ ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\r\n" +
-                                    "( •-• )  ~ ♡ Welcome to Giacint Trust Encrypt ♡ ~\r\n" +
+                                    "( •-• )  ~ ♡ Welcome to Giacint Trust Encrypt 1.7 ♡ ~\r\n" +
                                     "♡/づづ   Author: @YZukio\r\n" +
                                     "         Github: https://github.com/Ykizakyi-Zukio \r\n" +
                                     "      ~ ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\r\n\r\n\r\n");

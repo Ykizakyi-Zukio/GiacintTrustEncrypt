@@ -1,4 +1,7 @@
-﻿namespace GiacintTrustEncrypt.Lib
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace GiacintTrustEncrypt.Lib
 {
     internal class AppConfig
     {
@@ -37,8 +40,22 @@
         };
 
         //INT
+        [JsonSerializable]
         internal int MinimalPassLength { get; set; } = 8;
         internal int MinimalRecommendedPassLength { get; set; } = 12;
+
+        internal void ToJson(string path)
+        {
+            string json = JsonSerializer.Serialize(this);
+            StorageHelper.CreateFile(path, json);
+        }
+
+        public AppConfig() { }
+
+        public AppConfig(string json)
+        {
+
+        }
 
     }
 }
