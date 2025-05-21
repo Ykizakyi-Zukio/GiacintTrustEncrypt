@@ -270,6 +270,7 @@ class Program
                         Console.ForegroundColor = ConsoleColor.White;
                         break;
                     case "@root":
+                        Console.Clear();
                         RootCommands();
                         break;
                 }
@@ -289,16 +290,17 @@ class Program
 
     private void RootCommands()
     {
+        Debug.Info("You use root commands, <exit> to defualt mode\r\n");
         string message = Console.ReadLine() ?? "@null";
         string[] args = message.Split(" ");
 
-        switch (args[1])
+        switch (args[0])
         {
             case "param@set":
                 try
                 {
-                    if (args[2] == null) { Debug.Warning("Invalid param"); }
-                    if (args[3] == null) { Debug.Warning("Invalid content"); }
+                    if (args[1] == null) { Debug.Warning("Invalid param"); }
+                    if (args[2] == null) { Debug.Warning("Invalid content"); }
                     FieldInfo field = typeof(AppConfig).GetField(args[2]);
                     string value = (string)field.GetValue(config);
                     field.SetValue(config, value);
@@ -310,6 +312,11 @@ class Program
                 Association association = new(".gte", "GiacintTrustEncrypt", runExt);
                 association.RemoveAssociation();
                 break;
+            case "exit":
+                Console.Clear();
+                WelcomeMessage();
+                CommandsInit();
+                return;
         }
     }
 
