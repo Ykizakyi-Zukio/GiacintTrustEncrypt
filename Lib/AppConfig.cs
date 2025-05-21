@@ -7,6 +7,7 @@ namespace GiacintTrustEncrypt.Lib
     internal class AppConfig
     {
         //ARRAYS
+        [JsonIgnore]
         internal readonly string[] BinaryExtensions = {
         ".exe", ".dll", ".bin", ".so", ".out", ".elf", ".apk", ".app",
         ".lib", ".obj", ".a", ".pyd",
@@ -20,6 +21,7 @@ namespace GiacintTrustEncrypt.Lib
         ".resx", ".rsc", ".icns", ".ico",
         ".msi", ".cab", ".vhd", ".vhdx"
         };
+        [JsonIgnore]
         internal readonly string[] Cmds = {
         "@m@git - open author github",
         "@update - view latest release",
@@ -41,6 +43,7 @@ namespace GiacintTrustEncrypt.Lib
         };
 
         //INT
+        [JsonRequired]
         internal int MinimalPassLength { get; set; } = 8;
         internal int MinimalRecommendedPassLength { get; set; } = 12;
 
