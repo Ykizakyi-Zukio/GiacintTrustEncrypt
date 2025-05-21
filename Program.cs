@@ -305,7 +305,7 @@ class Program
                     string value = (string)field.GetValue(config);
                     field.SetValue(config, value);
                     Debug.Success($"{field.Name} is now {field.GetValue}");
-                } catch (Exception ex) {  Debug.Error(ex); }
+                } catch { Debug.Error(new Exception("Error in parameter set")); }
                 break;
             case "assotiation@unlink":
                 string runExt = StorageHelper.ReturnExists(@$"{Environment.CurrentDirectory}\GiacintTrustEncrypt.exe", @$"{Environment.CurrentDirectory}\GiacintTrustEncrypt");
