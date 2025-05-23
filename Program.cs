@@ -341,7 +341,7 @@ class Program
         Console.ForegroundColor= ConsoleColor.White;
     }
 
-    private void OnExit(object sender, EventArgs e)
+    private void OnExit(object? sender, EventArgs e)
     {
         config.ToJson(@$"{Environment.CurrentDirectory}/config.json");
     }
