@@ -117,11 +117,14 @@ class Program
                         WebHelper.OpenURL("https://github.com/Ykizakyi-Zukio");
                         break;
                     case "@pass":
-                        if (args.Length < 2) { Debug.Warning("Invalid pass"); break; }
-                        if (args[1].Length < config.MinimalRecommendedPassLength) Debug.Warning("Recommended minimal length of pass is 12 symbols UTF-8");
-                            if (args[1].Length >= config.MinimalPassLength)
+                        Debug.Info("Write your pass: ");
+                        string pass = Entry.ReadPassword();
+                        Console.WriteLine("\r\n");
+                        if (pass.Length < 2) { Debug.Warning("Invalid pass"); break; }
+                        if (pass.Length < config.MinimalRecommendedPassLength) Debug.Warning("Recommended minimal length of pass is 12 symbols UTF-8");
+                        if (pass.Length >= config.MinimalPassLength)
                         {
-                            key = new(HashHelper.Hash(args[1]));
+                            key = new(HashHelper.Hash(pass));
                             Debug.Success("Your encryption key created");
                             Debug.Info("To view his use: @pass@v");
                             aes = new(key.Get());
