@@ -40,6 +40,7 @@ namespace GiacintTrustEncrypt.Lib
         "@d@bin <filePath> - decrypt binary file (video, audio)",
         "@ec - encrypt selected file (works if file opened by assotiation)",
         "@dc - decrypt selected file (works if file opened by assotiation)",
+        "@root - root mode"
         };
 
         //INT
