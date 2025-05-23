@@ -291,11 +291,11 @@ class Program
     private void RootCommands()
     {
         Debug.Info("You use root commands, <exit> to defualt mode\r\n");
-        string message = Console.ReadLine() ?? "@null";
-        string[] args = message.Split(" ");
-
         while (true)
         {
+            string message = Console.ReadLine() ?? "@null";
+            string[] args = message.Split(" ");
+
             switch (args[0])
             {
                 case "param@set":
@@ -303,25 +303,19 @@ class Program
                     {
                         if (args[1] == null) { Debug.Warning("Invalid param"); break; }
                         if (args[2] == null) { Debug.Warning("Invalid content"); break; }
-                        FieldInfo field = typeof(AppConfig).GetField(args[1], BindingFlags.Public);
-                        string value = (string)field.GetValue(config);
-                        field.SetValue(config, value);
-                        Debug.Success($"{field.Name} is now {field.GetValue}");
+                        switch (args[1])
+                        {
+                            case "minPass":
+                                config.MinimalPassLength = Convert.ToInt32(args[2]);
+                                break;
+                        }
                     } catch { Debug.Error(new Exception("Error in parameter set")); }
                     break;
-                case "param@get@all":
-                    Type type = typeof(AppConfig);
-                    FieldInfo[] fields = type.GetFields(BindingFlags.Public);
-
-                    foreach (var field in fields)
-                    {
-                        Console.WriteLine($"{field.FieldType.Name} {field.Name} ({field.Attributes})");
-                    }
-                    break;
-                case "assotiation@unlink":
+                case "association@unlink":
                     string runExt = StorageHelper.ReturnExists(@$"{Environment.CurrentDirectory}\GiacintTrustEncrypt.exe", @$"{Environment.CurrentDirectory}\GiacintTrustEncrypt");
                     Association association = new(".gte", "GiacintTrustEncrypt", runExt);
                     association.RemoveAssociation();
+                    Debug.Info("Association .gte unlinked");
                     break;
                 case "exit":
                     Console.Clear();
@@ -329,6 +323,8 @@ class Program
                     CommandsInit();
                     return;
             }
+
+            
         }
     }
 
