@@ -276,6 +276,9 @@ class Program
                         Console.Clear();
                         RootCommands();
                         return;
+                    case "@config@s":
+                        config.ToJson(@$"{Environment.CurrentDirectory}/config.json");
+                        break;
                 }
             } 
             catch (Exception ex) 
