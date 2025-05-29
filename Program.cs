@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using GiacintTrustEncrypt.Lib;
 using System.Reflection;
+using System.Text.Json;
 
 namespace GiacintTrustEncrypt;
 
@@ -278,6 +279,9 @@ class Program
                         return;
                     case "@config@s":
                         config.ToJson(@$"{Environment.CurrentDirectory}/config.json");
+                        break;
+                    case "@config@view":
+                        Console.Write(JsonSerializer.Serialize<AppConfig>(config));
                         break;
                 }
             } 
