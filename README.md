@@ -6,4 +6,9 @@ Binary encryption AES with PCKS7 padding with random IV
 Hashing SHA256 GCM
 Key encryption AES256
 
+Support auto switching to binary encryption (@e, @d)
+View all commands @help
+
+For linking a association (.gte), launch app by administrator permissions, (sudo on linux)
+To unlink use, @root > association@unlink
 
