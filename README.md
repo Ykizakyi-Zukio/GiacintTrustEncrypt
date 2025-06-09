@@ -1,5 +1,5 @@
 # GiacintTrustEncrypt
-Encrypter program based on .NET
+Encryptor program based on .NET
 
 Encryption AES with random IV
 Binary encryption AES with PCKS7 padding with random IV
