@@ -1,13 +1,13 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
+
 
 namespace GiacintTrustEncrypt.Lib
 {
-    [JsonSerializable(typeof(AppConfig))]
+    
     public class AppConfig
     {
         //ARRAYS
-        [JsonIgnore]
+        
         internal readonly string[] BinaryExtensions = {
         ".exe", ".dll", ".bin", ".so", ".out", ".elf", ".apk", ".app",
         ".lib", ".obj", ".a", ".pyd",
@@ -21,7 +21,7 @@ namespace GiacintTrustEncrypt.Lib
         ".resx", ".rsc", ".icns", ".ico",
         ".msi", ".cab", ".vhd", ".vhdx"
         };
-        [JsonIgnore]
+        
         internal readonly string[] Cmds = {
         "@m@git - open author github",
         "@update - view latest release",
@@ -44,9 +44,9 @@ namespace GiacintTrustEncrypt.Lib
         };
 
         //INT
-        [JsonInclude]
+        
         public int MinimalPassLength { get; set; } = 8;
-        [JsonInclude]
+        
         public int MinimalRecommendedPassLength { get; set; } = 12;
 
         internal void ToJson(string path)
