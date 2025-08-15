@@ -1,4 +1,4 @@
-![Giacint Trust Encrypt](https://github.com/Ykizakyi-Zukio/GiacintTrustEncrypt/edit/main/20250815_220030.jpg)
+![Giacint Trust Encrypt](https://github.com/Ykizakyi-Zukio/GiacintTrustEncrypt/blob/main/20250815_220030.jpg)
 
 # GiacintTrustEncrypt
 Encryptor program based on .NET
